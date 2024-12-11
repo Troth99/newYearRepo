@@ -157,10 +157,10 @@ function update() {
                 fw.exploded = true;
                 
                 let explosionTypes = ['default', 'bright', 'waterfall', 'complex'];
-                let randomType = explosionTypes[Math.floor(Math.random() * explosionTypes.length)]
+                let randomType = explosionTypes[Math.floor(Math.random() * explosionTypes.length)];
                 explode(fw.x, fw.y, randomType);
             } else {
-                drawFirework(fw)
+                drawFirework(fw);
             }
         }
     }
