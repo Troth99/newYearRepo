@@ -43,18 +43,78 @@ function createFirework(itSelf) {
 }
 
 
-function explode(x, y) {
-    for (let i = 0; i < 50; i++) {
+function explode(x, y, type = 'default') {
+
+    let count = 50;
+    let gravity = 0.1;
+    let speedBase = 2;
+
+    if (type === 'complex'){
+
+        for (let i = 0; i < 50; i++){
+            let angle = Math.random() * 2 * Math.PI;
+            let speed = Math.random() * 3 + 2;
+            particles.push({
+                x:x,
+                y:y,
+                vx: Math.cos(angle) * speed,
+                vy:Math.sin(angle) * speed,
+                alpha:1,
+                color: `hsl(${Math.random() * 360}, 100%, 70%)`
+            })
+        }
+
+        for (let i = 0; i < 10; i++){
+            let angle = (i / 10) * Math.PI;
+            for (let j =0; j <5; j++){
+                let speed = 4 +j * 0.5;
+                particles.push({
+                    x: x,
+                    y: y,
+                    vx: Math.cos(angle) * speed,
+                    vy: Math.sin(angle) * speed,
+                    alpha: 1 - j * 0.2, 
+                    color: `hsl(${Math.random() * 360}, 100%, 50%)`
+                })
+            }
+        }
+
+        for (let i = 0; i< 30; i++){
+            let angle = Math.random() * 2 * Math.PI;
+            let speed = Math.random() * 2;
+            particles.push({
+                x: x,
+                y: y,
+                vx: Math.cos(angle) * speed,
+                vy: Math.sin(angle) * speed + 1,
+                alpha: Math.random() * 0.5 + 0.5,
+                color: `hsl(${Math.random() * 360}, 100%, 80%)`
+            });
+        }
+    }
+
+    if (type === `bright`){
+        count = 100;
+        speedBase = 4;
+    }else if (type === `waterfall`){
+        gravity = 0.5;
+        speedBase = 1;
+    }
+
+    for (let i = 0; i < 100; i++) {
         let angle = Math.random() * 2 * Math.PI;
-        let speed = Math.random() * 4 + 2;
-        let color = `hsl(${Math.random() * 360}, 100%, 60%)`;
+        let speed = Math.random() * speedBase + 1;
+
+        let color = `hsl(${Math.random() * 360}, 100%, ${type === 'bright' ? '80%' : '60%'})`;
+
         particles.push({
             x: x,
             y: y,
             vx: Math.cos(angle) * speed,
-            vy: Math.sin(angle) * speed,
+            vy: Math.sin(angle) * speed + (type === 'waterfall' ? gravity: 0 ),
             alpha: 1,
-            color: color
+            gravity: gravity,
+            color: color,
         });
     }
 }
@@ -95,31 +155,32 @@ function update() {
 
             if (fw.x >= fw.targetX - 5 && fw.x <= fw.targetX + 5 && fw.y <= fw.targetY) {
                 fw.exploded = true;
-                explode(fw.x, fw.y);
+                
+                let explosionTypes = ['default', 'bright', 'waterfall', 'complex'];
+                let randomType = explosionTypes[Math.floor(Math.random() * explosionTypes.length)]
+                explode(fw.x, fw.y, randomType);
             } else {
                 drawFirework(fw)
             }
         }
     }
+particles = particles.filter(p =>{
+    p.x += p.vx;
+    p.y += p.vy;
+    p.alpha -= 0.01;
 
-
-    for (let i = 0; i < particles.length; i++) {
-        let p = particles[i];
-        p.x += p.vx;
-        p.y += p.vy;
-        p.alpha -= 0.02;
-
-        if (p.alpha > 0) {
-            ctx.beginPath();
-            ctx.arc(p.x, p.y, 2, 0, Math.PI * 2);
-            ctx.fillStyle = p.color;
-            ctx.globalAlpha = p.alpha;
-            ctx.fill();
-        } else {
-            particles.splice(i, 1);
-            i--;
-        }
+    if (p.alpha > 0){
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, 2, 0, Math.PI * 2);
+        ctx.fillStyle = p.color;
+        ctx.globalAlpha = p.alpha;
+        ctx.fill()
+        return true;
     }
+    return false;
+})
+ctx.globalAlpha = 1
+
 
     if (Math.random() < 0.05) { 
         createFirework(Math.random() < 0.5); 
