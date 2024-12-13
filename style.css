@@ -36,3 +36,43 @@ body, html {
     height: 100%;
     box-sizing: border-box;
 }
+#text {
+    z-index:3;
+    position: absolute;
+    top:42%;
+    left:50%;
+    transform: translate(-50%, -50%);
+    font-size: 50px;
+    color:white;
+    text-align: center;
+    font-family: Arial, Helvetica, sans-serif;
+    pointer-events: none;
+    text-shadow: 2px 2px 10px rgba(255, 255, 255, 0.8);
+    opacity: 0;
+    transition: opacity 2s ease-in-out;
+    display: block;
+
+}
+#wish {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 30px;
+    color: white;
+    font-family: Arial, sans-serif;
+    text-align: center;
+    z-index: 3;
+    pointer-events: none;
+    opacity: 0; 
+    transition: opacity 3s ease-in-out; 
+    display: block;
+}
+
+.message {
+    opacity: 0;
+    font-size: 40px;
+    font-weight: bold;
+    margin: 20px 0;
+    transition: opacity 1s;
+}
