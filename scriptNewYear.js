@@ -3,26 +3,7 @@ let ctx = canvas.getContext('2d');
 
 const textElement = document.getElementById('text');
 const wishElement = document.getElementById('wish')
-window.onload = function() {
-    setTimeout(function() {
-       textElement.style.opacity = 1
-    }, 2000)
 
- setTimeout(function(){
-    let wishText = wishElement.innerHTML;
-    let index = 0;
-    wishElement.style.opacity = 1
-    wishElement.innerHTML = ""
-
-    let interval = setInterval(function(){
-        wishElement.innerHTML += wishText[index];
-        index++
-        if(index === wishText.length){
-            clearInterval(interval)
-        }
-    }, 120)
- }, 5000)
-}
 canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
 
